@@ -8,7 +8,7 @@ on:
       environment_selection:
         description: "Select one environment"
         type: choice
-        required: true
+        required: false
         options:
           -
           - test-blue-01
