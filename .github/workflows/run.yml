@@ -1,23 +1,24 @@
-name: Environment multi-select demo
+name: Run selected environments
 
-run-name: "Environment debug from issue #${{ github.event.issue.number }}"
+run-name: "Debug: ${{ inputs.environments }}"
 
 on:
-  issues:
-    types:
-      - opened
+  workflow_dispatch:
+    inputs:
+      environments:
+        description: "Environment names separated by commas"
+        required: true
+        type: string
+        default: "test-blue-01,test-green-01"
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
-  prepare-matrix:
-    if: startsWith(github.event.issue.title, '[Environment Debug]')
+  prepare:
     runs-on: ubuntu-latest
     outputs:
-      environments: ${{ steps.select.outputs.environments }}
-      count: ${{ steps.select.outputs.count }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
 
     steps:
       - name: Check out repository
@@ -26,75 +27,64 @@ jobs:
       - name: Install YAML parser
         run: python -m pip install --disable-pip-version-check PyYAML
 
-      - name: Read selected environments from the issue
-        id: select
+      - name: Build matrix from config
+        id: matrix
         env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
+          SELECTED_ENVIRONMENTS: ${{ inputs.environments }}
         run: |
           python <<'PY'
           import json
           import os
-          import re
           import sys
 
           import yaml
 
-          with open("config/config-environments.yml", encoding="utf-8") as file:
-              registry = yaml.safe_load(file)
+          with open("config-environments.yml", encoding="utf-8") as file:
+              config = yaml.safe_load(file)
 
           available = {
               item["environment"]: item
-              for entries in registry.values()
-              for item in entries
+              for environments in config.values()
+              for item in environments
           }
 
-          selected_names = list(dict.fromkeys(
-              re.findall(r"test-(?:blue|green|purple|orange)-\d{2}", os.environ["ISSUE_BODY"])
-          ))
+          selected = [
+              name.strip()
+              for name in os.environ["SELECTED_ENVIRONMENTS"].split(",")
+              if name.strip()
+          ]
+          selected = list(dict.fromkeys(selected))
 
-          unknown = [name for name in selected_names if name not in available]
+          unknown = [name for name in selected if name not in available]
           if unknown:
               print(f"Unknown environments: {', '.join(unknown)}", file=sys.stderr)
               sys.exit(1)
 
-          if not selected_names:
-              print("No environments were selected.", file=sys.stderr)
+          if not selected:
+              print("Enter at least one environment.", file=sys.stderr)
               sys.exit(1)
 
-          matrix = [available[name] for name in selected_names]
-          compact_json = json.dumps(matrix, separators=(",", ":"))
+          matrix = [available[name] for name in selected]
 
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-              output.write(f"environments={compact_json}\\n")
-              output.write(f"count={len(matrix)}\\n")
+              output.write(
+                  "matrix="
+                  + json.dumps(matrix, separators=(",", ":"))
+                  + "\n"
+              )
 
-          print(f"Selected {len(matrix)} environment(s):")
-          for name in selected_names:
-              print(f"- {name}")
+          print(f"Selected {len(matrix)} environment(s): {', '.join(selected)}")
           PY
 
-      - name: Comment on the request
-        uses: actions/github-script@v8
-        env:
-          SELECTED_COUNT: ${{ steps.select.outputs.count }}
-        with:
-          script: |
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `CI started for ${process.env.SELECTED_COUNT} selected environment(s). Follow the linked Actions run above.`
-            });
-
-  debug-environment:
+  debug:
     name: "Debug ${{ matrix.environment }}"
-    needs: prepare-matrix
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       max-parallel: 10
       matrix:
-        include: ${{ fromJSON(needs.prepare-matrix.outputs.environments) }}
+        include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
 
     steps:
       - name: Show selected environment
@@ -106,31 +96,4 @@ jobs:
           echo "Environment: ${ENVIRONMENT_NAME}"
           echo "Base URL: ${BASE_URL}"
           echo "API URL: ${BASE_API_URL}"
-          echo "Debug run completed successfully."
-
-  finish:
-    name: Finish request
-    if: always() && needs.prepare-matrix.result == 'success'
-    needs:
-      - prepare-matrix
-      - debug-environment
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Close the request
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const result = "${{ needs.debug-environment.result }}";
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `Environment debug finished with result: **${result}**.`
-            });
-            await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              state: "closed"
-            });
+          echo "Debug completed."
