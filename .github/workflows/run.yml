@@ -9,6 +9,7 @@ on:
         description: "Select one environment"
         type: choice
         required: true
+        default: "default"
         options:
           -
           - test-blue-01
