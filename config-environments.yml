@@ -1,0 +1,409 @@
+# Demo environment registry for testing CI environment selection.
+# All URLs use the reserved .test domain and do not point to real systems.
+# Naming convention: test-<color>-<number>.
+# 25 environments per color, 100 environments in total.
+
+dev:
+  # BLUE group
+  - environment: test-blue-01
+    base_url: https://test-blue-01.example.test
+    base_api_url: https://test-blue-01-api.example.test
+
+  - environment: test-blue-02
+    base_url: https://test-blue-02.example.test
+    base_api_url: https://test-blue-02-api.example.test
+
+  - environment: test-blue-03
+    base_url: https://test-blue-03.example.test
+    base_api_url: https://test-blue-03-api.example.test
+
+  - environment: test-blue-04
+    base_url: https://test-blue-04.example.test
+    base_api_url: https://test-blue-04-api.example.test
+
+  - environment: test-blue-05
+    base_url: https://test-blue-05.example.test
+    base_api_url: https://test-blue-05-api.example.test
+
+  - environment: test-blue-06
+    base_url: https://test-blue-06.example.test
+    base_api_url: https://test-blue-06-api.example.test
+
+  - environment: test-blue-07
+    base_url: https://test-blue-07.example.test
+    base_api_url: https://test-blue-07-api.example.test
+
+  - environment: test-blue-08
+    base_url: https://test-blue-08.example.test
+    base_api_url: https://test-blue-08-api.example.test
+
+  - environment: test-blue-09
+    base_url: https://test-blue-09.example.test
+    base_api_url: https://test-blue-09-api.example.test
+
+  - environment: test-blue-10
+    base_url: https://test-blue-10.example.test
+    base_api_url: https://test-blue-10-api.example.test
+
+  - environment: test-blue-11
+    base_url: https://test-blue-11.example.test
+    base_api_url: https://test-blue-11-api.example.test
+
+  - environment: test-blue-12
+    base_url: https://test-blue-12.example.test
+    base_api_url: https://test-blue-12-api.example.test
+
+  - environment: test-blue-13
+    base_url: https://test-blue-13.example.test
+    base_api_url: https://test-blue-13-api.example.test
+
+  - environment: test-blue-14
+    base_url: https://test-blue-14.example.test
+    base_api_url: https://test-blue-14-api.example.test
+
+  - environment: test-blue-15
+    base_url: https://test-blue-15.example.test
+    base_api_url: https://test-blue-15-api.example.test
+
+  - environment: test-blue-16
+    base_url: https://test-blue-16.example.test
+    base_api_url: https://test-blue-16-api.example.test
+
+  - environment: test-blue-17
+    base_url: https://test-blue-17.example.test
+    base_api_url: https://test-blue-17-api.example.test
+
+  - environment: test-blue-18
+    base_url: https://test-blue-18.example.test
+    base_api_url: https://test-blue-18-api.example.test
+
+  - environment: test-blue-19
+    base_url: https://test-blue-19.example.test
+    base_api_url: https://test-blue-19-api.example.test
+
+  - environment: test-blue-20
+    base_url: https://test-blue-20.example.test
+    base_api_url: https://test-blue-20-api.example.test
+
+  - environment: test-blue-21
+    base_url: https://test-blue-21.example.test
+    base_api_url: https://test-blue-21-api.example.test
+
+  - environment: test-blue-22
+    base_url: https://test-blue-22.example.test
+    base_api_url: https://test-blue-22-api.example.test
+
+  - environment: test-blue-23
+    base_url: https://test-blue-23.example.test
+    base_api_url: https://test-blue-23-api.example.test
+
+  - environment: test-blue-24
+    base_url: https://test-blue-24.example.test
+    base_api_url: https://test-blue-24-api.example.test
+
+  - environment: test-blue-25
+    base_url: https://test-blue-25.example.test
+    base_api_url: https://test-blue-25-api.example.test
+
+  # GREEN group
+  - environment: test-green-01
+    base_url: https://test-green-01.example.test
+    base_api_url: https://test-green-01-api.example.test
+
+  - environment: test-green-02
+    base_url: https://test-green-02.example.test
+    base_api_url: https://test-green-02-api.example.test
+
+  - environment: test-green-03
+    base_url: https://test-green-03.example.test
+    base_api_url: https://test-green-03-api.example.test
+
+  - environment: test-green-04
+    base_url: https://test-green-04.example.test
+    base_api_url: https://test-green-04-api.example.test
+
+  - environment: test-green-05
+    base_url: https://test-green-05.example.test
+    base_api_url: https://test-green-05-api.example.test
+
+  - environment: test-green-06
+    base_url: https://test-green-06.example.test
+    base_api_url: https://test-green-06-api.example.test
+
+  - environment: test-green-07
+    base_url: https://test-green-07.example.test
+    base_api_url: https://test-green-07-api.example.test
+
+  - environment: test-green-08
+    base_url: https://test-green-08.example.test
+    base_api_url: https://test-green-08-api.example.test
+
+  - environment: test-green-09
+    base_url: https://test-green-09.example.test
+    base_api_url: https://test-green-09-api.example.test
+
+  - environment: test-green-10
+    base_url: https://test-green-10.example.test
+    base_api_url: https://test-green-10-api.example.test
+
+  - environment: test-green-11
+    base_url: https://test-green-11.example.test
+    base_api_url: https://test-green-11-api.example.test
+
+  - environment: test-green-12
+    base_url: https://test-green-12.example.test
+    base_api_url: https://test-green-12-api.example.test
+
+  - environment: test-green-13
+    base_url: https://test-green-13.example.test
+    base_api_url: https://test-green-13-api.example.test
+
+  - environment: test-green-14
+    base_url: https://test-green-14.example.test
+    base_api_url: https://test-green-14-api.example.test
+
+  - environment: test-green-15
+    base_url: https://test-green-15.example.test
+    base_api_url: https://test-green-15-api.example.test
+
+  - environment: test-green-16
+    base_url: https://test-green-16.example.test
+    base_api_url: https://test-green-16-api.example.test
+
+  - environment: test-green-17
+    base_url: https://test-green-17.example.test
+    base_api_url: https://test-green-17-api.example.test
+
+  - environment: test-green-18
+    base_url: https://test-green-18.example.test
+    base_api_url: https://test-green-18-api.example.test
+
+  - environment: test-green-19
+    base_url: https://test-green-19.example.test
+    base_api_url: https://test-green-19-api.example.test
+
+  - environment: test-green-20
+    base_url: https://test-green-20.example.test
+    base_api_url: https://test-green-20-api.example.test
+
+  - environment: test-green-21
+    base_url: https://test-green-21.example.test
+    base_api_url: https://test-green-21-api.example.test
+
+  - environment: test-green-22
+    base_url: https://test-green-22.example.test
+    base_api_url: https://test-green-22-api.example.test
+
+  - environment: test-green-23
+    base_url: https://test-green-23.example.test
+    base_api_url: https://test-green-23-api.example.test
+
+  - environment: test-green-24
+    base_url: https://test-green-24.example.test
+    base_api_url: https://test-green-24-api.example.test
+
+  - environment: test-green-25
+    base_url: https://test-green-25.example.test
+    base_api_url: https://test-green-25-api.example.test
+
+  # PURPLE group
+  - environment: test-purple-01
+    base_url: https://test-purple-01.example.test
+    base_api_url: https://test-purple-01-api.example.test
+
+  - environment: test-purple-02
+    base_url: https://test-purple-02.example.test
+    base_api_url: https://test-purple-02-api.example.test
+
+  - environment: test-purple-03
+    base_url: https://test-purple-03.example.test
+    base_api_url: https://test-purple-03-api.example.test
+
+  - environment: test-purple-04
+    base_url: https://test-purple-04.example.test
+    base_api_url: https://test-purple-04-api.example.test
+
+  - environment: test-purple-05
+    base_url: https://test-purple-05.example.test
+    base_api_url: https://test-purple-05-api.example.test
+
+  - environment: test-purple-06
+    base_url: https://test-purple-06.example.test
+    base_api_url: https://test-purple-06-api.example.test
+
+  - environment: test-purple-07
+    base_url: https://test-purple-07.example.test
+    base_api_url: https://test-purple-07-api.example.test
+
+  - environment: test-purple-08
+    base_url: https://test-purple-08.example.test
+    base_api_url: https://test-purple-08-api.example.test
+
+  - environment: test-purple-09
+    base_url: https://test-purple-09.example.test
+    base_api_url: https://test-purple-09-api.example.test
+
+  - environment: test-purple-10
+    base_url: https://test-purple-10.example.test
+    base_api_url: https://test-purple-10-api.example.test
+
+  - environment: test-purple-11
+    base_url: https://test-purple-11.example.test
+    base_api_url: https://test-purple-11-api.example.test
+
+  - environment: test-purple-12
+    base_url: https://test-purple-12.example.test
+    base_api_url: https://test-purple-12-api.example.test
+
+  - environment: test-purple-13
+    base_url: https://test-purple-13.example.test
+    base_api_url: https://test-purple-13-api.example.test
+
+  - environment: test-purple-14
+    base_url: https://test-purple-14.example.test
+    base_api_url: https://test-purple-14-api.example.test
+
+  - environment: test-purple-15
+    base_url: https://test-purple-15.example.test
+    base_api_url: https://test-purple-15-api.example.test
+
+  - environment: test-purple-16
+    base_url: https://test-purple-16.example.test
+    base_api_url: https://test-purple-16-api.example.test
+
+  - environment: test-purple-17
+    base_url: https://test-purple-17.example.test
+    base_api_url: https://test-purple-17-api.example.test
+
+  - environment: test-purple-18
+    base_url: https://test-purple-18.example.test
+    base_api_url: https://test-purple-18-api.example.test
+
+  - environment: test-purple-19
+    base_url: https://test-purple-19.example.test
+    base_api_url: https://test-purple-19-api.example.test
+
+  - environment: test-purple-20
+    base_url: https://test-purple-20.example.test
+    base_api_url: https://test-purple-20-api.example.test
+
+  - environment: test-purple-21
+    base_url: https://test-purple-21.example.test
+    base_api_url: https://test-purple-21-api.example.test
+
+  - environment: test-purple-22
+    base_url: https://test-purple-22.example.test
+    base_api_url: https://test-purple-22-api.example.test
+
+  - environment: test-purple-23
+    base_url: https://test-purple-23.example.test
+    base_api_url: https://test-purple-23-api.example.test
+
+  - environment: test-purple-24
+    base_url: https://test-purple-24.example.test
+    base_api_url: https://test-purple-24-api.example.test
+
+  - environment: test-purple-25
+    base_url: https://test-purple-25.example.test
+    base_api_url: https://test-purple-25-api.example.test
+
+  # ORANGE group
+  - environment: test-orange-01
+    base_url: https://test-orange-01.example.test
+    base_api_url: https://test-orange-01-api.example.test
+
+  - environment: test-orange-02
+    base_url: https://test-orange-02.example.test
+    base_api_url: https://test-orange-02-api.example.test
+
+  - environment: test-orange-03
+    base_url: https://test-orange-03.example.test
+    base_api_url: https://test-orange-03-api.example.test
+
+  - environment: test-orange-04
+    base_url: https://test-orange-04.example.test
+    base_api_url: https://test-orange-04-api.example.test
+
+  - environment: test-orange-05
+    base_url: https://test-orange-05.example.test
+    base_api_url: https://test-orange-05-api.example.test
+
+  - environment: test-orange-06
+    base_url: https://test-orange-06.example.test
+    base_api_url: https://test-orange-06-api.example.test
+
+  - environment: test-orange-07
+    base_url: https://test-orange-07.example.test
+    base_api_url: https://test-orange-07-api.example.test
+
+  - environment: test-orange-08
+    base_url: https://test-orange-08.example.test
+    base_api_url: https://test-orange-08-api.example.test
+
+  - environment: test-orange-09
+    base_url: https://test-orange-09.example.test
+    base_api_url: https://test-orange-09-api.example.test
+
+  - environment: test-orange-10
+    base_url: https://test-orange-10.example.test
+    base_api_url: https://test-orange-10-api.example.test
+
+  - environment: test-orange-11
+    base_url: https://test-orange-11.example.test
+    base_api_url: https://test-orange-11-api.example.test
+
+  - environment: test-orange-12
+    base_url: https://test-orange-12.example.test
+    base_api_url: https://test-orange-12-api.example.test
+
+  - environment: test-orange-13
+    base_url: https://test-orange-13.example.test
+    base_api_url: https://test-orange-13-api.example.test
+
+  - environment: test-orange-14
+    base_url: https://test-orange-14.example.test
+    base_api_url: https://test-orange-14-api.example.test
+
+  - environment: test-orange-15
+    base_url: https://test-orange-15.example.test
+    base_api_url: https://test-orange-15-api.example.test
+
+  - environment: test-orange-16
+    base_url: https://test-orange-16.example.test
+    base_api_url: https://test-orange-16-api.example.test
+
+  - environment: test-orange-17
+    base_url: https://test-orange-17.example.test
+    base_api_url: https://test-orange-17-api.example.test
+
+  - environment: test-orange-18
+    base_url: https://test-orange-18.example.test
+    base_api_url: https://test-orange-18-api.example.test
+
+  - environment: test-orange-19
+    base_url: https://test-orange-19.example.test
+    base_api_url: https://test-orange-19-api.example.test
+
+  - environment: test-orange-20
+    base_url: https://test-orange-20.example.test
+    base_api_url: https://test-orange-20-api.example.test
+
+  - environment: test-orange-21
+    base_url: https://test-orange-21.example.test
+    base_api_url: https://test-orange-21-api.example.test
+
+  - environment: test-orange-22
+    base_url: https://test-orange-22.example.test
+    base_api_url: https://test-orange-22-api.example.test
+
+  - environment: test-orange-23
+    base_url: https://test-orange-23.example.test
+    base_api_url: https://test-orange-23-api.example.test
+
+  - environment: test-orange-24
+    base_url: https://test-orange-24.example.test
+    base_api_url: https://test-orange-24-api.example.test
+
+  - environment: test-orange-25
+    base_url: https://test-orange-25.example.test
+    base_api_url: https://test-orange-25-api.example.test

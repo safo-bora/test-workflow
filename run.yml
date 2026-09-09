@@ -1,0 +1,136 @@
+name: Environment multi-select demo
+
+run-name: "Environment debug from issue #${{ github.event.issue.number }}"
+
+on:
+  issues:
+    types:
+      - opened
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  prepare-matrix:
+    if: startsWith(github.event.issue.title, '[Environment Debug]')
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.select.outputs.environments }}
+      count: ${{ steps.select.outputs.count }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Install YAML parser
+        run: python -m pip install --disable-pip-version-check PyYAML
+
+      - name: Read selected environments from the issue
+        id: select
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python <<'PY'
+          import json
+          import os
+          import re
+          import sys
+
+          import yaml
+
+          with open("config-environments.yml", encoding="utf-8") as file:
+              registry = yaml.safe_load(file)
+
+          available = {
+              item["environment"]: item
+              for entries in registry.values()
+              for item in entries
+          }
+
+          selected_names = list(dict.fromkeys(
+              re.findall(r"test-(?:blue|green|purple|orange)-\d{2}", os.environ["ISSUE_BODY"])
+          ))
+
+          unknown = [name for name in selected_names if name not in available]
+          if unknown:
+              print(f"Unknown environments: {', '.join(unknown)}", file=sys.stderr)
+              sys.exit(1)
+
+          if not selected_names:
+              print("No environments were selected.", file=sys.stderr)
+              sys.exit(1)
+
+          matrix = [available[name] for name in selected_names]
+          compact_json = json.dumps(matrix, separators=(",", ":"))
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"environments={compact_json}\\n")
+              output.write(f"count={len(matrix)}\\n")
+
+          print(f"Selected {len(matrix)} environment(s):")
+          for name in selected_names:
+              print(f"- {name}")
+          PY
+
+      - name: Comment on the request
+        uses: actions/github-script@v8
+        env:
+          SELECTED_COUNT: ${{ steps.select.outputs.count }}
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `CI started for ${process.env.SELECTED_COUNT} selected environment(s). Follow the linked Actions run above.`
+            });
+
+  debug-environment:
+    name: "Debug ${{ matrix.environment }}"
+    needs: prepare-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        include: ${{ fromJSON(needs.prepare-matrix.outputs.environments) }}
+
+    steps:
+      - name: Show selected environment
+        env:
+          ENVIRONMENT_NAME: ${{ matrix.environment }}
+          BASE_URL: ${{ matrix.base_url }}
+          BASE_API_URL: ${{ matrix.base_api_url }}
+        run: |
+          echo "Environment: ${ENVIRONMENT_NAME}"
+          echo "Base URL: ${BASE_URL}"
+          echo "API URL: ${BASE_API_URL}"
+          echo "Debug run completed successfully."
+
+  finish:
+    name: Finish request
+    if: always() && needs.prepare-matrix.result == 'success'
+    needs:
+      - prepare-matrix
+      - debug-environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Close the request
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const result = "${{ needs.debug-environment.result }}";
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `Environment debug finished with result: **${result}**.`
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: "closed"
+            });
