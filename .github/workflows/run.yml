@@ -12,7 +12,7 @@ on:
         default: test-blue-04
         options:
           -
-          - test-blue-01
+          - stg
           - test-blue-02
           - test-blue-03
           - test-blue-04
