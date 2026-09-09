@@ -6,12 +6,10 @@ on:
   workflow_dispatch:
     inputs:
       environment_selection:
-        description: "Select one environment, ALL, or MULTISELECT_INPUT"
+        description: "Select one environment"
         type: choice
         required: true
         options:
-          - MULTISELECT_INPUT
-          - ALL
           - test-blue-01
           - test-blue-02
           - test-blue-03
@@ -113,9 +111,15 @@ on:
           - test-orange-24
           - test-orange-25
 
+      multiselect_input:
+        description: "MULTISELECT_INPUT — use comma-separated registry environment names"
+        type: boolean
+        required: false
+        default: false
+
       registry_env_names:
         description: >-
-          Used only with MULTISELECT_INPUT.
+          Used only when the MULTISELECT_INPUT checkbox is selected.
           Enter registry environment names separated by commas.
           Example: test-blue-01, test-green-01, test-orange-25.
           One name is still a single-environment run.
@@ -221,11 +225,7 @@ jobs:
               for item in environments
           }
           inputs = json.loads(os.environ["WORKFLOW_INPUTS"])
-          mode = inputs["environment_selection"]
-
-          if mode == "ALL":
-              selected = list(available)
-          elif mode == "MULTISELECT_INPUT":
+          if inputs["multiselect_input"]:
               selected = [
                   name.strip()
                   for name in inputs["registry_env_names"].split(",")
@@ -239,7 +239,7 @@ jobs:
                   )
                   sys.exit(1)
           else:
-              selected = [mode]
+              selected = [inputs["environment_selection"]]
 
           unknown = [name for name in selected if name not in available]
           if unknown:
