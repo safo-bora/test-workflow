@@ -1,6 +1,6 @@
 name: Run selected environments
 
-run-name: "${{ inputs.test_type }} on ${{ inputs.environment_selection }} by @${{ github.actor }}"
+run-name: "${{ inputs.test_type }} on ${{ inputs.registry_env_names || inputs.environment_selection }} by @${{ github.actor }}"
 
 on:
   workflow_dispatch:
@@ -111,19 +111,13 @@ on:
           - test-orange-24
           - test-orange-25
 
-      multiselect_input:
-        description: "Select environment"
-        type: boolean
-        required: false
-        default: false
-
       registry_env_names:
-        description: "For MULTISELECT_INPUT: comma-separated environment names."
+        description: "Multiple environments, comma-separated. Leave empty to use the dropdown."
         type: string
         required: false
 
       ui_feature_tag:
-        description: "──────── TEST SETTINGS ──────── "
+        description: "──────── TEST SETTINGS ──────── UI feature folder"
         type: choice
         required: true
         options:
@@ -221,19 +215,14 @@ jobs:
               for item in environments
           }
           inputs = json.loads(os.environ["WORKFLOW_INPUTS"])
-          if inputs["multiselect_input"]:
+          manual_names = inputs["registry_env_names"].strip()
+          if manual_names:
               selected = [
                   name.strip()
-                  for name in inputs["registry_env_names"].split(",")
+                  for name in manual_names.split(",")
                   if name.strip()
               ]
               selected = list(dict.fromkeys(selected))
-              if not selected:
-                  print(
-                      "Enter at least one environment in Registry env names",
-                      file=sys.stderr,
-                  )
-                  sys.exit(1)
           else:
               selected = [inputs["environment_selection"]]
 
