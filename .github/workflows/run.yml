@@ -118,16 +118,12 @@ on:
         default: false
 
       registry_env_names:
-        description: >-
-          Used only when the MULTISELECT_INPUT checkbox is selected.
-          Enter registry environment names separated by commas.
-          Example: test-blue-01, test-green-01, test-orange-25.
-          One name is still a single-environment run.
+        description: "For MULTISELECT_INPUT: comma-separated environment names."
         type: string
         required: false
 
       ui_feature_tag:
-        description: "UI feature folder. Select all to run all UI tags."
+        description: "──────── TEST SETTINGS ──────── UI feature folder"
         type: choice
         required: true
         options:
