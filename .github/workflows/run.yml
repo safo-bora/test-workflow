@@ -1,15 +1,10 @@
 name: Run selected environments
 
-run-name: "Environment debug by @${{ github.actor }}"
+run-name: "${{ inputs.test_type }} on selected environments by @${{ github.actor }}"
 
 on:
   workflow_dispatch:
     inputs:
-      all_environments:
-        description: "ALL — run every environment from the config"
-        type: boolean
-        required: false
-        default: false
       test_blue_01:
         description: "test-blue-01"
         type: boolean
@@ -90,46 +85,72 @@ on:
         type: boolean
         required: false
         default: false
-      test_blue_17:
-        description: "test-blue-17"
+      all_environments:
+        description: "ALL — run every environment from the config"
         type: boolean
         required: false
         default: false
-      test_blue_18:
-        description: "test-blue-18"
-        type: boolean
+
+      test_type:
+        description: "Test type to run. Use infer-from-selector when a test case ID is provided."
+        type: choice
+        required: true
+        options:
+          - infer-from-selector
+          - api-schema
+          - api-regression
+          - ui-regression
+          - fmp-ui-regression
+
+      feature_tag:
+        description: "Test selector by tag. Select all to run all tests."
+        type: choice
+        required: true
+        options:
+          - all
+          - pr
+          - smoke
+          - nightly
+
+      test_selector_id:
+        description: "Test case ID(s), comma-separated"
+        type: string
         required: false
-        default: false
-      test_blue_19:
-        description: "test-blue-19"
-        type: boolean
+
+      test_selector_title:
+        description: "Test selector by title"
+        type: string
         required: false
-        default: false
-      test_blue_20:
-        description: "test-blue-20"
-        type: boolean
+
+      thread_count:
+        description: "Thread count for pytest-xdist"
+        type: choice
+        required: true
+        options:
+          - auto
+          - "2"
+          - "4"
+          - "8"
+
+      xray_test_plan_id:
+        description: "Xray Test Plan ID (optional)"
+        type: string
         required: false
-        default: false
-      test_blue_21:
-        description: "test-blue-21"
-        type: boolean
+
+      xray_test_execution_id:
+        description: "Xray Test Execution ID (optional)"
+        type: string
         required: false
-        default: false
-      test_blue_22:
-        description: "test-blue-22"
-        type: boolean
-        required: false
-        default: false
-      test_blue_23:
-        description: "test-blue-23"
-        type: boolean
-        required: false
-        default: false
-      test_blue_24:
-        description: "test-blue-24"
-        type: boolean
-        required: false
-        default: false
+
+      ui_feature_tag:
+        description: "UI feature folder. Select all to run all UI tags."
+        type: choice
+        required: true
+        options:
+          - all
+          - obligations
+          - matters
+          - search
 
 permissions:
   contents: read
@@ -140,7 +161,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
-      count: ${{ steps.matrix.outputs.count }}
 
     steps:
       - name: Check out repository
@@ -149,7 +169,7 @@ jobs:
       - name: Install YAML parser
         run: python -m pip install --disable-pip-version-check PyYAML
 
-      - name: Build matrix from selected checkboxes
+      - name: Build matrix from environment checkboxes
         id: matrix
         env:
           WORKFLOW_INPUTS: ${{ toJSON(inputs) }}
@@ -169,7 +189,6 @@ jobs:
               for environments in config.values()
               for item in environments
           }
-
           inputs = json.loads(os.environ["WORKFLOW_INPUTS"])
 
           if inputs["all_environments"]:
@@ -178,7 +197,7 @@ jobs:
               selected = [
                   key.replace("_", "-")
                   for key, checked in inputs.items()
-                  if key != "all_environments" and checked
+                  if key.startswith("test_blue_") and checked
               ]
 
           if not selected:
@@ -191,18 +210,14 @@ jobs:
               sys.exit(1)
 
           matrix = [available[name] for name in selected]
-
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
               output.write("matrix=" + json.dumps(matrix, separators=(",", ":")) + "\n")
-              output.write(f"count={len(matrix)}\n")
 
-          print(f"Selected {len(matrix)} environment(s):")
-          for name in selected:
-              print(f"- {name}")
+          print(f"Selected {len(matrix)} environment(s): {', '.join(selected)}")
           PY
 
   debug:
-    name: "Debug ${{ matrix.environment }}"
+    name: "${{ inputs.test_type }} — ${{ matrix.environment }}"
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
@@ -212,13 +227,29 @@ jobs:
         include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
 
     steps:
-      - name: Show selected environment
+      - name: Show mock test configuration
         env:
           ENVIRONMENT_NAME: ${{ matrix.environment }}
           BASE_URL: ${{ matrix.base_url }}
           BASE_API_URL: ${{ matrix.base_api_url }}
+          TEST_TYPE: ${{ inputs.test_type }}
+          FEATURE_TAG: ${{ inputs.feature_tag }}
+          TEST_SELECTOR_ID: ${{ inputs.test_selector_id }}
+          TEST_SELECTOR_TITLE: ${{ inputs.test_selector_title }}
+          THREAD_COUNT: ${{ inputs.thread_count }}
+          XRAY_TEST_PLAN_ID: ${{ inputs.xray_test_plan_id }}
+          XRAY_TEST_EXECUTION_ID: ${{ inputs.xray_test_execution_id }}
+          UI_FEATURE_TAG: ${{ inputs.ui_feature_tag }}
         run: |
           echo "Environment: ${ENVIRONMENT_NAME}"
           echo "Base URL: ${BASE_URL}"
           echo "API URL: ${BASE_API_URL}"
-          echo "Debug completed."
+          echo "Test type: ${TEST_TYPE}"
+          echo "Feature tag: ${FEATURE_TAG}"
+          echo "Test case IDs: ${TEST_SELECTOR_ID}"
+          echo "Test title: ${TEST_SELECTOR_TITLE}"
+          echo "Threads: ${THREAD_COUNT}"
+          echo "Xray Test Plan: ${XRAY_TEST_PLAN_ID}"
+          echo "Xray Test Execution: ${XRAY_TEST_EXECUTION_ID}"
+          echo "UI feature: ${UI_FEATURE_TAG}"
+          echo "Mock run completed."
