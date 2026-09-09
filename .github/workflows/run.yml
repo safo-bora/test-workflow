@@ -10,6 +10,7 @@ on:
         type: choice
         required: true
         options:
+          -
           - test-blue-01
           - test-blue-02
           - test-blue-03
