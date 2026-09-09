@@ -80,16 +80,24 @@ on:
         type: boolean
         required: false
         default: false
-      test_blue_16:
-        description: "test-blue-16"
-        type: boolean
-        required: false
-        default: false
       all_environments:
         description: "ALL — run every environment from the config"
         type: boolean
         required: false
         default: false
+      registry_env_names:
+        description: "Registry env name(s), comma-separated (e.g. test-blue-01, test-blue-02, test-blue-03, test-blue-04, test-blue-05, test-blue-06, test-blue-07, test-blue-08, test-blue-09, test-blue-10, test-blue-11, test-blue-12, test-blue-13, test-blue-14, test-blue-15, test-blue-16, test-blue-17, test-blue-18, test-blue-19, test-blue-20, test-blue-21, test-blue-22, test-blue-23, test-blue-24, test-blue-25, test-green-01, test-green-02, test-green-03, test-green-04, test-green-05, test-green-06, test-green-07, test-green-08, test-green-09, test-green-10, test-green-11, test-green-12, test-green-13, test-green-14, test-green-15, test-green-16, test-green-17, test-green-18, test-green-19, test-green-20, test-green-21, test-green-22, test-green-23, test-green-24, test-green-25, test-purple-01, test-purple-02, test-purple-03, test-purple-04, test-purple-05, test-purple-06, test-purple-07, test-purple-08, test-purple-09, test-purple-10, test-purple-11, test-purple-12, test-purple-13, test-purple-14, test-purple-15, test-purple-16, test-purple-17, test-purple-18, test-purple-19, test-purple-20, test-purple-21, test-purple-22, test-purple-23, test-purple-24, test-purple-25, test-orange-01, test-orange-02, test-orange-03, test-orange-04, test-orange-05, test-orange-06, test-orange-07, test-orange-08, test-orange-09, test-orange-10, test-orange-11, test-orange-12, test-orange-13, test-orange-14, test-orange-15, test-orange-16, test-orange-17, test-orange-18, test-orange-19, test-orange-20, test-orange-21, test-orange-22, test-orange-23, test-orange-24, test-orange-25). One name is still a single-env run."
+        type: string
+        required: false
+      ui_feature_tag:
+        description: "UI feature folder. Select all to run all UI tags."
+        type: choice
+        required: true
+        options:
+          - all
+          - obligations
+          - matters
+          - search
 
       test_type:
         description: "Test type to run. Use infer-from-selector when a test case ID is provided."
@@ -199,6 +207,12 @@ jobs:
                   for key, checked in inputs.items()
                   if key.startswith("test_blue_") and checked
               ]
+              selected.extend(
+                  name.strip()
+                  for name in inputs["registry_env_names"].split(",")
+                  if name.strip()
+              )
+              selected = list(dict.fromkeys(selected))
 
           if not selected:
               print("Select at least one environment or select ALL.", file=sys.stderr)
