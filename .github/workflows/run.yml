@@ -112,7 +112,7 @@ on:
           - test-orange-25
 
       multiselect_input:
-        description: "MULTISELECT_INPUT — use comma-separated registry environment names"
+        description: "Select environment"
         type: boolean
         required: false
         default: false
@@ -123,7 +123,7 @@ on:
         required: false
 
       ui_feature_tag:
-        description: "──────── TEST SETTINGS ──────── UI feature folder"
+        description: "──────── TEST SETTINGS ──────── "
         type: choice
         required: true
         options:
