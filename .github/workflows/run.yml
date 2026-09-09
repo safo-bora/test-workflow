@@ -9,8 +9,9 @@ on:
         description: "Select one environment"
         type: choice
         required: false
+        default: test-blue-04
         options:
-          -
+          - stg
           - test-blue-01
           - test-blue-02
           - test-blue-03
