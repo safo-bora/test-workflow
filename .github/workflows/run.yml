@@ -39,7 +39,7 @@ jobs:
 
           import yaml
 
-          with open("config-environments.yml", encoding="utf-8") as file:
+          with open("config/config-environments.yml", encoding="utf-8") as file:
               registry = yaml.safe_load(file)
 
           available = {
