@@ -1,123 +1,146 @@
-name: Run selected environment
+name: Run selected environments
 
-run-name: "Debug: ${{ inputs.environment }}"
+run-name: "Environment debug by @${{ github.actor }}"
 
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: "Select an environment"
-        required: true
-        type: choice
-        options:
-          - test-blue-01
-          - test-blue-02
-          - test-blue-03
-          - test-blue-04
-          - test-blue-05
-          - test-blue-06
-          - test-blue-07
-          - test-blue-08
-          - test-blue-09
-          - test-blue-10
-          - test-blue-11
-          - test-blue-12
-          - test-blue-13
-          - test-blue-14
-          - test-blue-15
-          - test-blue-16
-          - test-blue-17
-          - test-blue-18
-          - test-blue-19
-          - test-blue-20
-          - test-blue-21
-          - test-blue-22
-          - test-blue-23
-          - test-blue-24
-          - test-blue-25
-          - test-green-01
-          - test-green-02
-          - test-green-03
-          - test-green-04
-          - test-green-05
-          - test-green-06
-          - test-green-07
-          - test-green-08
-          - test-green-09
-          - test-green-10
-          - test-green-11
-          - test-green-12
-          - test-green-13
-          - test-green-14
-          - test-green-15
-          - test-green-16
-          - test-green-17
-          - test-green-18
-          - test-green-19
-          - test-green-20
-          - test-green-21
-          - test-green-22
-          - test-green-23
-          - test-green-24
-          - test-green-25
-          - test-purple-01
-          - test-purple-02
-          - test-purple-03
-          - test-purple-04
-          - test-purple-05
-          - test-purple-06
-          - test-purple-07
-          - test-purple-08
-          - test-purple-09
-          - test-purple-10
-          - test-purple-11
-          - test-purple-12
-          - test-purple-13
-          - test-purple-14
-          - test-purple-15
-          - test-purple-16
-          - test-purple-17
-          - test-purple-18
-          - test-purple-19
-          - test-purple-20
-          - test-purple-21
-          - test-purple-22
-          - test-purple-23
-          - test-purple-24
-          - test-purple-25
-          - test-orange-01
-          - test-orange-02
-          - test-orange-03
-          - test-orange-04
-          - test-orange-05
-          - test-orange-06
-          - test-orange-07
-          - test-orange-08
-          - test-orange-09
-          - test-orange-10
-          - test-orange-11
-          - test-orange-12
-          - test-orange-13
-          - test-orange-14
-          - test-orange-15
-          - test-orange-16
-          - test-orange-17
-          - test-orange-18
-          - test-orange-19
-          - test-orange-20
-          - test-orange-21
-          - test-orange-22
-          - test-orange-23
-          - test-orange-24
-          - test-orange-25
+      all_environments:
+        description: "ALL — run every environment from the config"
+        type: boolean
+        required: false
+        default: false
+      test_blue_01:
+        description: "test-blue-01"
+        type: boolean
+        required: false
+        default: false
+      test_blue_02:
+        description: "test-blue-02"
+        type: boolean
+        required: false
+        default: false
+      test_blue_03:
+        description: "test-blue-03"
+        type: boolean
+        required: false
+        default: false
+      test_blue_04:
+        description: "test-blue-04"
+        type: boolean
+        required: false
+        default: false
+      test_blue_05:
+        description: "test-blue-05"
+        type: boolean
+        required: false
+        default: false
+      test_blue_06:
+        description: "test-blue-06"
+        type: boolean
+        required: false
+        default: false
+      test_blue_07:
+        description: "test-blue-07"
+        type: boolean
+        required: false
+        default: false
+      test_blue_08:
+        description: "test-blue-08"
+        type: boolean
+        required: false
+        default: false
+      test_blue_09:
+        description: "test-blue-09"
+        type: boolean
+        required: false
+        default: false
+      test_blue_10:
+        description: "test-blue-10"
+        type: boolean
+        required: false
+        default: false
+      test_blue_11:
+        description: "test-blue-11"
+        type: boolean
+        required: false
+        default: false
+      test_blue_12:
+        description: "test-blue-12"
+        type: boolean
+        required: false
+        default: false
+      test_blue_13:
+        description: "test-blue-13"
+        type: boolean
+        required: false
+        default: false
+      test_blue_14:
+        description: "test-blue-14"
+        type: boolean
+        required: false
+        default: false
+      test_blue_15:
+        description: "test-blue-15"
+        type: boolean
+        required: false
+        default: false
+      test_blue_16:
+        description: "test-blue-16"
+        type: boolean
+        required: false
+        default: false
+      test_blue_17:
+        description: "test-blue-17"
+        type: boolean
+        required: false
+        default: false
+      test_blue_18:
+        description: "test-blue-18"
+        type: boolean
+        required: false
+        default: false
+      test_blue_19:
+        description: "test-blue-19"
+        type: boolean
+        required: false
+        default: false
+      test_blue_20:
+        description: "test-blue-20"
+        type: boolean
+        required: false
+        default: false
+      test_blue_21:
+        description: "test-blue-21"
+        type: boolean
+        required: false
+        default: false
+      test_blue_22:
+        description: "test-blue-22"
+        type: boolean
+        required: false
+        default: false
+      test_blue_23:
+        description: "test-blue-23"
+        type: boolean
+        required: false
+        default: false
+      test_blue_24:
+        description: "test-blue-24"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
 
 jobs:
-  debug:
-    name: "Debug ${{ inputs.environment }}"
+  prepare:
+    name: Prepare environment matrix
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      count: ${{ steps.matrix.outputs.count }}
 
     steps:
       - name: Check out repository
@@ -126,11 +149,13 @@ jobs:
       - name: Install YAML parser
         run: python -m pip install --disable-pip-version-check PyYAML
 
-      - name: Read selected environment from config
+      - name: Build matrix from selected checkboxes
+        id: matrix
         env:
-          SELECTED_ENVIRONMENT: ${{ inputs.environment }}
+          WORKFLOW_INPUTS: ${{ toJSON(inputs) }}
         run: |
           python <<'PY'
+          import json
           import os
           import sys
 
@@ -145,14 +170,55 @@ jobs:
               for item in environments
           }
 
-          selected = os.environ["SELECTED_ENVIRONMENT"]
-          if selected not in available:
-              print(f"Unknown environment: {selected}", file=sys.stderr)
+          inputs = json.loads(os.environ["WORKFLOW_INPUTS"])
+
+          if inputs["all_environments"]:
+              selected = list(available)
+          else:
+              selected = [
+                  key.replace("_", "-")
+                  for key, checked in inputs.items()
+                  if key != "all_environments" and checked
+              ]
+
+          if not selected:
+              print("Select at least one environment or select ALL.", file=sys.stderr)
               sys.exit(1)
 
-          environment = available[selected]
-          print(f"Environment: {environment['environment']}")
-          print(f"Base URL: {environment['base_url']}")
-          print(f"API URL: {environment['base_api_url']}")
-          print("Debug completed successfully.")
+          unknown = [name for name in selected if name not in available]
+          if unknown:
+              print(f"Missing from config: {', '.join(unknown)}", file=sys.stderr)
+              sys.exit(1)
+
+          matrix = [available[name] for name in selected]
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write("matrix=" + json.dumps(matrix, separators=(",", ":")) + "\n")
+              output.write(f"count={len(matrix)}\n")
+
+          print(f"Selected {len(matrix)} environment(s):")
+          for name in selected:
+              print(f"- {name}")
           PY
+
+  debug:
+    name: "Debug ${{ matrix.environment }}"
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+
+    steps:
+      - name: Show selected environment
+        env:
+          ENVIRONMENT_NAME: ${{ matrix.environment }}
+          BASE_URL: ${{ matrix.base_url }}
+          BASE_API_URL: ${{ matrix.base_api_url }}
+        run: |
+          echo "Environment: ${ENVIRONMENT_NAME}"
+          echo "Base URL: ${BASE_URL}"
+          echo "API URL: ${BASE_API_URL}"
+          echo "Debug completed."
