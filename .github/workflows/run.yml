@@ -117,7 +117,7 @@ on:
         required: false
 
       ui_feature_tag:
-        description: "──────── TEST SETTINGS ──────── UI feature folder"
+        description: "UI feature folder"
         type: choice
         required: true
         options:
